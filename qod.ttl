@@ -11,12 +11,12 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix om-2: <http://www.ontology-of-units-of-measure.org/resource/om-2/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix scal: <http://www.example.com/ns/scal#> .
+@prefix scal: <https://raw.githubusercontent.com/PTBresearch/QoD/refs/heads/main/scal.ttl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix sosa: <http://www.w3.org/ns/sosa/> .
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix terms: <http://purl.org/dc/terms/> .
-@prefix trans: <http://www.example.com/ns/trans#> .
+@prefix trans: <https://raw.githubusercontent.com/PTBresearch/QoD/refs/heads/main/trans.ttl#> .
 @prefix schema: <http://schema.org/> .
 @prefix mathematics: <http://ontomathpro.org/ontology#> .
 @base <http://www.example.com/ns/qod> .
