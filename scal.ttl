@@ -7,7 +7,7 @@
 @base <http://www.example.com/ns/scal#> .
 
 <http://www.example.com/ns/scal#> rdf:type owl:Ontology ;
-                                   owl:imports <https://www.w3.org/2005/Incubator/ssn/ssnx/ssn> ,
+                                   owl:imports <https://www.w3.org/ns/ssn/> ,
                                                <http://www.w3.org/ns/ssn/systems/> ,
                                                <http://www.w3.org/ns/sosa/> ;
                                    <http://purl.org/dc/elements/1.1/date> "2021/09/08" ,
