@@ -1,156 +1,85 @@
-@prefix : <http://www.example.de/dsi#> .
-@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix schema: <http://schema.org/> .
-@base <http://www.example.de/ns/dsi#> .
+@prefix schema: <http://schema.org/>.
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2/>.
+@prefix dsi: <http://www.example.com/ns/dsi#> .
 
-<http://www.example.de/ns/dsi#> rdf:type owl:Ontology .
-
-#################################################################
-#    Annotation properties
-#################################################################
-
-###  http://schema.org/domainIncludes
-schema:domainIncludes rdf:type owl:AnnotationProperty .
-
-
-###  http://schema.org/rangeIncludes
-schema:rangeIncludes rdf:type owl:AnnotationProperty .
-
-
-###  http://www.example.de/ns/dsi#hasNumericalValue
-:hasNumericalValue rdf:type owl:AnnotationProperty .
-
-
-###  http://www.w3.org/2002/07/owl#minCardinality
-owl:minCardinality rdf:type owl:AnnotationProperty .
-
-
-#################################################################
-#    Object Properties
-#################################################################
-
-###  http://www.example.de/ns/dsi#hasUncertainty
-:hasUncertainty rdf:type owl:ObjectProperty ;
-                schema:domainIncludes :MeasureWithUncertainty ;
-                schema:rangeIncludes :OWLClassImpl_8078f9b1_1f22_4f5d_aec0_8ead0bca82ae ;
-                rdfs:comment "Relation between a MeasureWithUncertainty and the assigned Uncertainty."@en ;
-                rdfs:isDefinedBy <http://www.example.com/ns/dsi#> ;
-                rdfs:label "has uncertainty"@en .
-
-
-#################################################################
-#    Data properties
-#################################################################
-
-###  http://www.example.de/ns/dsi#hasCoverageFactor
-:hasCoverageFactor rdf:type owl:DatatypeProperty .
-
-
-###  http://www.example.de/ns/dsi#hasCoverageProbability
-:hasCoverageProbability rdf:type owl:DatatypeProperty .
-
-
-###  http://www.example.de/ns/dsi#hasDistribution
-:hasDistribution rdf:type owl:DatatypeProperty ;
-                 schema:domainIncludes :OWLClassImpl_8078f9b1_1f22_4f5d_aec0_8ead0bca82ae ;
-                 schema:rangeIncludes xsd:string ;
-                 rdfs:comment "Relation between an Uncertainty and the uncertainty distribution (as string)."@en ;
-                 rdfs:isDefinedBy <http://www.example.com/ns/dsi#> ;
-                 rdfs:label "has uncertainty distribution"@en .
-
-
-###  http://www.example.de/ns/dsi#hasIntervalMax
-:hasIntervalMax rdf:type owl:DatatypeProperty .
-
-
-###  http://www.example.de/ns/dsi#hasIntervalMin
-:hasIntervalMin rdf:type owl:DatatypeProperty .
-
-
-###  http://www.example.de/ns/dsi#hasStandardUncertainty
-:hasStandardUncertainty rdf:type owl:DatatypeProperty .
-
+<http://www.example.de/dsi> rdf:type owl:Ontology .
 
 #################################################################
 #    Classes
 #################################################################
 
-###  http://www.example.de/ns/dsi#CoverageInterval
-:CoverageInterval rdf:type owl:Class ;
-                  rdfs:subClassOf :OWLClassImpl_8078f9b1_1f22_4f5d_aec0_8ead0bca82ae ,
-                                  [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasDistribution ;
-                                    owl:minCardinality "0"^^xsd:nonNegativeInteger
-                                  ] ,
-                                  [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasCoverageProbability ;
-                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                    owl:onDataRange xsd:double
-                                  ] ,
-                                  [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasIntervalMax ;
-                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                    owl:onDataRange xsd:double
-                                  ] ,
-                                  [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasIntervalMin ;
-                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                    owl:onDataRange xsd:double
-                                  ] ,
-                                  [ rdf:type owl:Restriction ;
-                                    owl:onProperty :hasStandardUncertainty ;
-                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                    owl:onDataRange xsd:double
-                                  ] ;
-                  rdfs:comment "Coverage Interval Specification as in Digital-SI"@en ;
-                  rdfs:isDefinedBy <http://www.example.com/ns/dsi#> .
+dsi:MeasureWithUncertainty a rdfs:Class , owl:Class ;
+  rdfs:label "Extended om:Measure with uncertainty quantification as in Digital-SI"@en ;
+  rdfs:subClassOf om:Measure ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasUncertainty ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:isDefinedBy dsi: . 
 
+dsi:Uncertainty a rdfs:Class , owl:Class ;
+  rdfs:label "Extended om:Measure with uncertainty quantification as in Digital-SI"@en ;
+  rdfs:isDefinedBy dsi: . 
 
-###  http://www.example.de/ns/dsi#ExpandedUncertainty
-:ExpandedUncertainty rdf:type owl:Class ;
-                     rdfs:subClassOf :OWLClassImpl_8078f9b1_1f22_4f5d_aec0_8ead0bca82ae ,
-                                     [ rdf:type owl:Restriction ;
-                                       owl:onProperty :hasCoverageFactor ;
-                                       owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                       owl:onDataRange xsd:double
-                                     ] ,
-                                     [ rdf:type owl:Restriction ;
-                                       owl:onProperty :hasCoverageProbability ;
-                                       owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                       owl:onDataRange xsd:double
-                                     ] ,
-                                     [ rdf:type owl:Restriction ;
-                                       owl:onProperty :hasDistribution ;
-                                       owl:minCardinality "0"^^xsd:nonNegativeInteger
-                                     ] ;
-                     rdfs:comment "Expanded Uncertainty Specification as in Digital-SI"@en ;
-                     rdfs:isDefinedBy <http://www.example.com/ns/dsi#> .
+dsi:ExpandedUncertainty a rdfs:Class , owl:Class ;
+  rdfs:label "Expanded Uncertainty Specification as in Digital-SI"@en ;
+  rdfs:subClassOf dsi:Uncertainty ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasNumericalValue ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasCoverageFactor ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasCoverageProbability ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasDistribution ; owl:minCardinality "0"^^xsd:nonNegativeInteger ] ;
+  rdfs:isDefinedBy dsi: . 
 
+dsi:CoverageInterval a rdfs:Class , owl:Class ;
+  rdfs:label "Coverage Interval Specification as in Digital-SI"@en ;
+  rdfs:subClassOf dsi:Uncertainty ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasStandardUncertainty ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasIntervalMin ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasIntervalMax ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasCoverageProbability ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] ;
+  rdfs:subClassOf [ a owl:Restriction ; owl:onProperty dsi:hasDistribution ; owl:minCardinality "0"^^xsd:nonNegativeInteger ] ;
+  rdfs:isDefinedBy dsi: . 
 
-###  http://www.example.de/ns/dsi#MeasureWithUncertainty
-:MeasureWithUncertainty rdf:type owl:Class ;
-                        rdfs:subClassOf om:Measure ;
-                        rdfs:comment "Extended om:Measure with uncertainty quantification as in Digital-SI"@en ;
-                        rdfs:isDefinedBy <http://www.example.com/ns/dsi#> .
+#################################################################
+#    Properties
+#################################################################
 
+dsi:hasUncertainty a owl:ObjectProperty ;
+  rdfs:label "has uncertainty"@en ;
+  rdfs:comment "Relation between a MeasureWithUncertainty and the assigned Uncertainty."@en ;
+  schema:domainIncludes dsi:MeasureWithUncertainty ;
+  schema:rangeIncludes dsi:Uncertainty ;
+  rdfs:isDefinedBy dsi: .
 
-###  http://www.example.de/ns/dsi#OWLClassImpl_8078f9b1_1f22_4f5d_aec0_8ead0bca82ae
-:OWLClassImpl_8078f9b1_1f22_4f5d_aec0_8ead0bca82ae rdf:type owl:Class ;
-                                                   rdfs:isDefinedBy <http://www.example.com/ns/dsi#> ;
-                                                   rdfs:label "Uncertainty"@de ,
-                                                              "Uncertainty"@en .
+dsi:hasNumericalValue a owl:ObjectProperty ;
+  rdfs:subPropertyOf om:hasNumericalValue ;
+  rdfs:isDefinedBy dsi: .
 
+dsi:hasCoverageFactor a owl:ObjectProperty ;
+  rdfs:subPropertyOf om:hasNumericalValue ;
+  rdfs:isDefinedBy dsi: .
 
-###  http://www.ontology-of-units-of-measure.org/resource/om-2/Measure
-om:Measure rdf:type owl:Class .
+dsi:hasCoverageProbability a owl:ObjectProperty ;
+  rdfs:subPropertyOf om:hasNumericalValue ;
+  rdfs:isDefinedBy dsi: .
 
+dsi:hasStandardUncertainty a owl:ObjectProperty ;
+  rdfs:subPropertyOf om:hasNumericalValue ;
+  rdfs:isDefinedBy dsi: .
 
-[ owl:minCardinality "1"^^xsd:nonNegativeInteger
-] .
+dsi:hasIntervalMin a owl:ObjectProperty ;
+  rdfs:subPropertyOf om:hasNumericalValue ;
+  rdfs:isDefinedBy dsi: .
 
-###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
+dsi:hasIntervalMax a owl:ObjectProperty ;
+  rdfs:subPropertyOf om:hasNumericalValue ;
+  rdfs:isDefinedBy dsi: .
+
+dsi:hasDistribution a owl:ObjectProperty ;
+  rdfs:label "has uncertainty distribution"@en ;
+  rdfs:comment "Relation between an Uncertainty and the uncertainty distribution (as string)."@en ;
+  schema:domainIncludes dsi:Uncertainty ;
+  schema:rangeIncludes xsd:string ;
+  rdfs:isDefinedBy dsi: .

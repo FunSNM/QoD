@@ -15,6 +15,7 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix sosa: <http://www.w3.org/ns/sosa/> .
 @prefix vann: <http://purl.org/vocab/vann/> .
+@prefix scal#: <http://www.example.com/ns/scal#> .
 @prefix terms: <http://purl.org/dc/terms/> .
 @prefix trans: <http://www.example.de/trans#> .
 @prefix schema: <http://schema.org/> .
@@ -23,15 +24,15 @@
 
 <http://www.example.de/qod> rdf:type owl:Ontology ;
                              owl:imports <http://www.example.de/trans> ,
-                                         scal: ,
+                                         scal#: ,
                                          <http://www.w3.org/ns/ssn/systems/> ;
                              rdfs:seeAlso <https://www.w3.org/2015/spatial/wiki/Semantic_Sensor_Network_Ontology> ;
-                             terms:creator [ ] ,
-[ ] ;
-terms:license <http://www.opengeospatial.org/ogc/Software> ,
-              <http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document> ;
-terms:created "2017-05-14"^^xsd:date ,
-              "2017-04-17"^^xsd:date .
+                             terms:license <http://www.opengeospatial.org/ogc/Software> ,
+                                           <http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document> ;
+                             terms:creator [ ] ;
+terms:created "2017-05-14"^^xsd:date ;
+terms:creator [ ] ;
+terms:created "2017-04-17"^^xsd:date .
 
 #################################################################
 #    Annotation properties
@@ -98,13 +99,21 @@ trans:TeXLiteral rdf:type rdfs:Datatype .
 #################################################################
 
 ###  http://www.example.com/ns/dsi#hasUncertainty
-dsi:hasUncertainty rdfs:domain om-2:Measure ;
+dsi:hasUncertainty rdf:type owl:ObjectProperty ;
+                   rdfs:domain om-2:Measure ;
                    rdfs:range dsi:Uncertainty .
 
 
 ###  http://www.example.com/ns/scal#hasCalibrationModel
-scal:hasCalibrationModel rdf:type owl:ObjectProperty ;
-                         rdfs:domain scal:CalibratedSensor .
+scal#:hasCalibrationModel rdf:type owl:ObjectProperty ;
+                          rdfs:domain scal#:CalibratedSensor .
+
+
+###  http://www.example.de/qod#
+: rdf:type owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain :CalibrationData ;
+  rdfs:range :LastCalibrationDate .
 
 
 ###  http://www.example.de/qod#Interprets
@@ -146,13 +155,6 @@ scal:hasCalibrationModel rdf:type owl:ObjectProperty ;
             rdfs:range :Indicator .
 
 
-###  http://www.example.de/qod#'has_calibration_date'
-: rdf:type owl:ObjectProperty ;
-  rdfs:subPropertyOf owl:topObjectProperty ;
-  rdfs:domain :CalibrationData ;
-  rdfs:range :LastCalibrationDate .
-
-
 ###  http://www.example.de/trans#hasArrayDefinition
 trans:hasArrayDefinition rdf:type owl:ObjectProperty ;
                          rdfs:subPropertyOf om-2:hasValue ;
@@ -177,10 +179,6 @@ trans:hasCoefficients rdf:type owl:ObjectProperty ;
 ###  http://www.example.de/trans#hasCoordinates
 trans:hasCoordinates rdf:type owl:ObjectProperty ;
                      rdfs:subPropertyOf trans:hasArrayDefinition .
-
-
-###  http://www.example.de/trans#hasCovarianceMatrix
-trans:hasCovarianceMatrix rdfs:domain trans:MultivariateUncertainty .
 
 
 ###  http://www.example.de/trans#hasDenominator
@@ -299,15 +297,18 @@ om-2:hasValue rdf:type owl:ObjectProperty ;
 
 
 ###  http://www.w3.org/ns/sosa/actsOnProperty
-sosa:actsOnProperty rdfs:isDefinedBy sosa: .
+sosa:actsOnProperty rdf:type owl:ObjectProperty ;
+                    rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/hasFeatureOfInterest
-sosa:hasFeatureOfInterest rdfs:isDefinedBy sosa: .
+sosa:hasFeatureOfInterest rdf:type owl:ObjectProperty ;
+                          rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/hasResult
-sosa:hasResult rdfs:isDefinedBy sosa: .
+sosa:hasResult rdf:type owl:ObjectProperty ;
+               rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/hasSample
@@ -317,66 +318,85 @@ sosa:hasSample rdf:type owl:ObjectProperty ,
 
 
 ###  http://www.w3.org/ns/sosa/hosts
-sosa:hosts owl:propertyChainAxiom ( <http://www.w3.org/ns/ssn/inDeployment>
+sosa:hosts rdf:type owl:ObjectProperty ;
+           owl:propertyChainAxiom ( <http://www.w3.org/ns/ssn/inDeployment>
                                     <http://www.w3.org/ns/ssn/deployedSystem>
                                   ) .
 
 
 ###  http://www.w3.org/ns/sosa/isActedOnBy
-sosa:isActedOnBy rdfs:isDefinedBy sosa: .
+sosa:isActedOnBy rdf:type owl:ObjectProperty ;
+                 rdfs:isDefinedBy sosa: .
+
+
+###  http://www.w3.org/ns/sosa/isHostedBy
+sosa:isHostedBy rdf:type owl:ObjectProperty .
 
 
 ###  http://www.w3.org/ns/sosa/isObservedBy
-sosa:isObservedBy rdfs:isDefinedBy sosa: .
+sosa:isObservedBy rdf:type owl:ObjectProperty ;
+                  rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/isResultOf
-sosa:isResultOf rdfs:isDefinedBy sosa: .
+sosa:isResultOf rdf:type owl:ObjectProperty ;
+                rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/isSampleOf
-sosa:isSampleOf rdf:type owl:FunctionalProperty ;
+sosa:isSampleOf rdf:type owl:ObjectProperty ,
+                         owl:FunctionalProperty ;
                 rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/madeActuation
-sosa:madeActuation rdfs:isDefinedBy sosa: .
+sosa:madeActuation rdf:type owl:ObjectProperty ;
+                   rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/madeByActuator
-sosa:madeByActuator rdfs:isDefinedBy sosa: .
+sosa:madeByActuator rdf:type owl:ObjectProperty ;
+                    rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/madeBySampler
-sosa:madeBySampler rdfs:isDefinedBy sosa: .
+sosa:madeBySampler rdf:type owl:ObjectProperty ;
+                   rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/madeBySensor
-sosa:madeBySensor rdfs:isDefinedBy sosa: .
+sosa:madeBySensor rdf:type owl:ObjectProperty ;
+                  rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/madeObservation
-sosa:madeObservation rdfs:isDefinedBy sosa: .
+sosa:madeObservation rdf:type owl:ObjectProperty ;
+                     rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/madeSampling
-sosa:madeSampling rdfs:isDefinedBy sosa: .
+sosa:madeSampling rdf:type owl:ObjectProperty ;
+                  rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/observedProperty
-sosa:observedProperty rdfs:isDefinedBy sosa: .
+sosa:observedProperty rdf:type owl:ObjectProperty ;
+                      rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/observes
-sosa:observes rdfs:subPropertyOf <http://www.w3.org/ns/ssn/forProperty> .
+sosa:observes rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf <http://www.w3.org/ns/ssn/forProperty> .
 
 
 ###  http://www.w3.org/ns/sosa/phenomenonTime
-sosa:phenomenonTime rdfs:isDefinedBy sosa: .
+sosa:phenomenonTime rdf:type owl:ObjectProperty ;
+                    rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.w3.org/ns/sosa/usedProcedure
-sosa:usedProcedure owl:propertyChainAxiom ( sosa:madeByActuator
+sosa:usedProcedure rdf:type owl:ObjectProperty ;
+                   owl:propertyChainAxiom ( sosa:madeByActuator
                                             <http://www.w3.org/ns/ssn/implements>
                                           ) ,
                                           ( sosa:madeBySampler
@@ -594,23 +614,28 @@ sosa:usedProcedure owl:propertyChainAxiom ( sosa:madeByActuator
 #################################################################
 
 ###  http://www.example.com/ns/dsi#hasCoverageFactor
-dsi:hasCoverageFactor rdfs:range xsd:double .
+dsi:hasCoverageFactor rdf:type owl:DatatypeProperty ;
+                      rdfs:range xsd:double .
 
 
 ###  http://www.example.com/ns/dsi#hasCoverageProbability
-dsi:hasCoverageProbability rdfs:range xsd:double .
+dsi:hasCoverageProbability rdf:type owl:DatatypeProperty ;
+                           rdfs:range xsd:double .
 
 
 ###  http://www.example.com/ns/dsi#hasIntervalMax
-dsi:hasIntervalMax rdfs:range xsd:double .
+dsi:hasIntervalMax rdf:type owl:DatatypeProperty ;
+                   rdfs:range xsd:double .
 
 
 ###  http://www.example.com/ns/dsi#hasIntervalMin
-dsi:hasIntervalMin rdfs:range xsd:double .
+dsi:hasIntervalMin rdf:type owl:DatatypeProperty ;
+                   rdfs:range xsd:double .
 
 
 ###  http://www.example.com/ns/dsi#hasStandardUncertainty
-dsi:hasStandardUncertainty rdfs:range xsd:float .
+dsi:hasStandardUncertainty rdf:type owl:DatatypeProperty ;
+                           rdfs:range xsd:float .
 
 
 ###  http://www.example.de/qod#CriticalIf
@@ -690,6 +715,7 @@ dsi:hasStandardUncertainty rdfs:range xsd:float .
 ###  http://www.example.de/trans#hasCovarianceMatrix
 trans:hasCovarianceMatrix rdf:type owl:DatatypeProperty ;
                           rdfs:subPropertyOf om-2:hasNumericalValue ;
+                          rdfs:domain trans:MultivariateUncertainty ;
                           rdfs:range [ rdf:type rdfs:Datatype ;
                                        owl:unionOf ( trans:MathMLLiteral
                                                      trans:TeXLiteral
@@ -715,7 +741,8 @@ om-2:hasNumericalValue rdf:type owl:DatatypeProperty ;
 
 
 ###  http://www.w3.org/ns/sosa/resultTime
-sosa:resultTime rdfs:isDefinedBy sosa: .
+sosa:resultTime rdf:type owl:DatatypeProperty ;
+                rdfs:isDefinedBy sosa: .
 
 
 #################################################################
@@ -750,7 +777,8 @@ sosa:resultTime rdfs:isDefinedBy sosa: .
 
 
 ###  http://www.example.com/ns/dsi#ExpandedUncertainty
-dsi:ExpandedUncertainty rdfs:subClassOf [ rdf:type owl:Restriction ;
+dsi:ExpandedUncertainty rdf:type owl:Class ;
+                        rdfs:subClassOf [ rdf:type owl:Restriction ;
                                           owl:onProperty om-2:hasNumericalValue ;
                                           owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                           owl:onDataRange xsd:double
@@ -758,7 +786,8 @@ dsi:ExpandedUncertainty rdfs:subClassOf [ rdf:type owl:Restriction ;
 
 
 ###  http://www.example.com/ns/dsi#MeasureWithUncertainty
-dsi:MeasureWithUncertainty rdfs:subClassOf [ rdf:type owl:Restriction ;
+dsi:MeasureWithUncertainty rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
                                              owl:onProperty dsi:hasUncertainty ;
                                              owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                              owl:onClass dsi:Uncertainty
@@ -767,17 +796,19 @@ dsi:MeasureWithUncertainty rdfs:subClassOf [ rdf:type owl:Restriction ;
 
 
 ###  http://www.example.com/ns/dsi#Uncertainty
-dsi:Uncertainty owl:equivalentClass :MeasurementUncertainty ;
+dsi:Uncertainty rdf:type owl:Class ;
+                owl:equivalentClass :MeasurementUncertainty ;
                 rdfs:comment "Uncertainty object as specified in the D-SI standard"@en .
 
 
 ###  http://www.example.com/ns/scal#CalibratedSensor
-scal:CalibratedSensor rdf:type owl:Class ;
-                      rdfs:subClassOf [ rdf:type owl:Restriction ;
-                                        owl:onProperty <http://www.w3.org/ns/ssn/systems/hasSystemProperty> ;
-                                        owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                        owl:onClass :CalibrationData
-                                      ] .
+scal#:CalibratedSensor rdf:type owl:Class ;
+                       rdfs:subClassOf sosa:Sensor ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty <http://www.w3.org/ns/ssn/systems/hasSystemProperty> ;
+                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onClass :CalibrationData
+                                       ] .
 
 
 ###  http://www.example.de/qod#Accuracy
@@ -842,6 +873,7 @@ scal:CalibratedSensor rdf:type owl:Class ;
 
 ###  http://www.example.de/qod#CalibrationData
 :CalibrationData rdf:type owl:Class ;
+                 owl:equivalentClass <http://www.example.de/scal#CalibrationData> ;
                  rdfs:subClassOf <http://www.w3.org/ns/ssn/Property> ,
                                  [ rdf:type owl:Restriction ;
                                    owl:onProperty :hasMetric ;
@@ -1078,6 +1110,26 @@ value out of range""" .
                                                                     owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                                                     owl:onClass :CalibrationData
                                                                   ] .
+
+
+###  http://www.example.de/scal#CalibrationData
+<http://www.example.de/scal#CalibrationData> rdf:type owl:Class ;
+                                             rdfs:subClassOf <http://www.w3.org/ns/ssn/Property> ,
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty :hasMetric ;
+                                                               owl:minQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+                                                               owl:onClass :RecencyMetric
+                                                             ] ,
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty :hasMetric ;
+                                                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                               owl:onClass :MeasurementUncertaintyMetric
+                                                             ] ,
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty <http://www.w3.org/ns/ssn/systems/hasSystemProperty> ;
+                                                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                               owl:onClass :MeasurementUncertainty
+                                                             ] .
 
 
 ###  http://www.example.de/scal#SoftSensor
@@ -1628,7 +1680,8 @@ om-2:Date rdf:type owl:Class .
 ###  http://www.ontology-of-units-of-measure.org/resource/om-2/Measure
 
 ###  http://www.w3.org/ns/sosa/ActuatableProperty
-sosa:ActuatableProperty rdfs:subClassOf <http://www.w3.org/ns/ssn/Property> ,
+sosa:ActuatableProperty rdf:type owl:Class ;
+                        rdfs:subClassOf <http://www.w3.org/ns/ssn/Property> ,
                                         [ rdf:type owl:Restriction ;
                                           owl:onProperty sosa:isActedOnBy ;
                                           owl:allValuesFrom sosa:Actuation
@@ -1700,7 +1753,8 @@ sosa:Actuator rdf:type owl:Class ;
 
 
 ###  http://www.w3.org/ns/sosa/FeatureOfInterest
-sosa:FeatureOfInterest rdfs:subClassOf [ rdf:type owl:Restriction ;
+sosa:FeatureOfInterest rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
                                          owl:onProperty sosa:hasSample ;
                                          owl:allValuesFrom sosa:Sample
                                        ] ,
@@ -1716,7 +1770,8 @@ sosa:FeatureOfInterest rdfs:subClassOf [ rdf:type owl:Restriction ;
 
 
 ###  http://www.w3.org/ns/sosa/ObservableProperty
-sosa:ObservableProperty rdfs:subClassOf <http://www.w3.org/ns/ssn/Property> ,
+sosa:ObservableProperty rdf:type owl:Class ;
+                        rdfs:subClassOf <http://www.w3.org/ns/ssn/Property> ,
                                         [ rdf:type owl:Restriction ;
                                           owl:onProperty sosa:isObservedBy ;
                                           owl:allValuesFrom sosa:Sensor
@@ -2442,7 +2497,7 @@ trans:DenominatorArray rdf:type owl:NamedIndividual ,
 ###  http://www.example.de/trans#MPU9250
 trans:MPU9250 rdf:type owl:NamedIndividual ,
                        <http://www.w3.org/ns/ssn/System> ;
-              scal:hasCalibrationModel trans:MPUcalibrationModel .
+              scal#:hasCalibrationModel trans:MPUcalibrationModel .
 
 
 ###  http://www.example.de/trans#MPUDenominatorPolynomial
